@@ -552,14 +552,15 @@ export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
   ctx.fillRect(0, 0, STAGE_W, WATER_Y);
 
   // stars
-  for (let i = 0; i < STAR_SEEDS.length; i++) {
-    const s = STAR_SEEDS[i];
+  let starIdx = 0;
+  for (const s of STAR_SEEDS) {
     const tw = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(t * 1.3 + s.p));
-    ctx.fillStyle = STAR_COLORS[i % 3];
+    ctx.fillStyle = STAR_COLORS[starIdx % STAR_COLORS.length] ?? "#f7e6b0";
     ctx.globalAlpha = tw * 0.9;
     ctx.beginPath();
     ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
     ctx.fill();
+    starIdx++;
   }
   ctx.globalAlpha = 1;
 

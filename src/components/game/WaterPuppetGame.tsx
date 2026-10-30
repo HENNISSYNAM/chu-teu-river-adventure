@@ -94,7 +94,6 @@ export default function WaterPuppetGame() {
     modeRef.current = mode;
   }, [mode]);
   useEffect(() => {
-    handRef.current?.setTuning?.(tuning);
     if (handRef.current) handRef.current.tuning = tuning;
   }, [tuning]);
 
@@ -222,34 +221,34 @@ export default function WaterPuppetGame() {
         switch (ev) {
           case "bite":
             a.bite();
-            setTeuLine(TEU_LINES.bite);
+            setTeuLine(TEU_LINES["bite"] ?? "");
             break;
           case "catch":
             a.caught();
             catchIdx.current += 1;
-            setTeuLine(TEU_LINES[`catch${(catchIdx.current % 3) + 1}`] ?? TEU_LINES.catch);
+            setTeuLine(TEU_LINES[`catch${(catchIdx.current % 3) + 1}`] ?? TEU_LINES["catch"] ?? "");
             setFishCaught((f) => Math.min(3, f + 1));
             break;
           case "collide":
             a.thud();
-            setTeuLine(TEU_LINES.collide);
+            setTeuLine(TEU_LINES["collide"] ?? "");
             break;
           case "empty":
             a.drop();
-            setTeuLine(TEU_LINES.empty);
+            setTeuLine(TEU_LINES["empty"] ?? "");
             break;
           case "escape":
             a.drop();
-            setTeuLine(TEU_LINES.escape);
+            setTeuLine(TEU_LINES["escape"] ?? "");
             break;
           case "goal-dock":
             a.goal();
             setDockActive(true);
-            setTeuLine(TEU_LINES.dock);
+            setTeuLine(TEU_LINES["dock"] ?? "");
             break;
           case "win": {
             a.win();
-            setTeuLine(TEU_LINES.win);
+            setTeuLine(TEU_LINES["win"] ?? "");
             const e = engineRef.current!;
             setResult({ time: e.elapsed, skill: e.skillScore(), casts: e.casts });
             window.setTimeout(() => setPhase("result"), 1800);
