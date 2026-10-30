@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { readLedger, shortHash, type LedgerRecord } from "@/lib/ledger";
+import castRow from "@/assets/heritrust/cast-row.webp";
+import conceptLotus from "@/assets/heritrust/concept-lotus.webp";
+import conceptDragon from "@/assets/heritrust/concept-dragon.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -78,6 +81,15 @@ function Hub() {
             mạng chuỗi khối liên minh và học liên kết Việt Nam – Hàn Quốc giúp bản ghi di sản luôn
             kiểm chứng được và di tích có nguy cơ luôn được nhìn thấy.
           </p>
+          <div className="mx-auto mt-6 max-w-3xl overflow-hidden rounded-2xl bg-[#fbf8f1] p-3 shadow-xl">
+            <img
+              src={castRow}
+              alt="Bốn con rối nước sơn mài: chú Tễu, cá chép vàng, rồng xanh và trâu đen"
+              className="h-auto w-full"
+              width={1774}
+              height={887}
+            />
+          </div>
         </header>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -108,6 +120,31 @@ function Hub() {
         </div>
 
         <section className="panel mt-8 p-5">
+          <h2 className="font-display text-lg font-bold text-gold">Bản điện thoại đang thiết kế</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Camera nhận diện bàn tay: vẫy tay để chú Tễu múa, giơ hai tay gọi rồng nước.
+          </p>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4">
+            <img
+              src={conceptLotus}
+              alt="Ý tưởng giao diện: người chơi vẫy tay trước camera, chú Tễu vớt hoa sen sáng trên ao làng"
+              className="h-auto w-full rounded-xl border border-gold/40"
+              width={941}
+              height={1672}
+              loading="lazy"
+            />
+            <img
+              src={conceptDragon}
+              alt="Ý tưởng giao diện: giơ hai tay gọi rồng nước, chú Tễu và cá chép vàng múa trước thủy đình"
+              className="h-auto w-full rounded-xl border border-gold/40"
+              width={941}
+              height={1672}
+              loading="lazy"
+            />
+          </div>
+        </section>
+
+        <section className="panel mt-4 p-5">
           <h2 className="font-display text-lg font-bold text-gold">HeriTrust trong một phút</h2>
           <div className="mt-3 grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
             <div>
