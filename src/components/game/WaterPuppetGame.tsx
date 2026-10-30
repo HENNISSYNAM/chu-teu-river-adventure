@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BackToHub, LedgerReceipt } from "@/components/heritrust/stage";
 import {
   Engine,
   STAGE_W,
@@ -622,6 +623,9 @@ export default function WaterPuppetGame() {
       {/* ============ MÀN HÌNH ĐẦU ============ */}
       {phase === "menu" && (
         <div className="w-full max-w-3xl py-6">
+          <div className="mb-4">
+            <BackToHub />
+          </div>
           <div className="text-center">
             <p className="chip mb-3">🏮 Đêm hội bên ao làng · Sân khấu rối nước 🏮</p>
             <h1 className="font-display text-4xl font-extrabold leading-tight text-gold sm:text-6xl">
@@ -715,6 +719,13 @@ export default function WaterPuppetGame() {
                 <p className="mt-1 text-[11px] text-muted-foreground">Điều khiển khéo léo</p>
               </div>
             </div>
+            <LedgerReceipt
+              game="Đêm Hội Rối Nước"
+              code="ROI"
+              title="Tích trò thả câu bắt cá"
+              summary={`3/3 cá, khéo léo ${result.skill}%`}
+              payload={result}
+            />
             <div className="mt-5 flex flex-col gap-2">
               <button className="btn-primary" onClick={replay}>
                 ↺ Chèo một lượt nữa

@@ -31,7 +31,7 @@ const STAR_SEEDS: { x: number; y: number; r: number; p: number }[] = [];
 const LANTERN_SLOTS = [110, 250, 390, 530, 670, 810];
 const STAR_COLORS = ["#f7e6b0", "#f2d491", "#d8ecf7"];
 
-function lantern(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, t: number) {
+export function lantern(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, t: number) {
   const sway = Math.sin(t * 1.6 + x) * 3 * s;
   // glow
   const g = ctx.createRadialGradient(x + sway, y + 14 * s, 2, x + sway, y + 14 * s, 34 * s);
@@ -61,7 +61,7 @@ function lantern(ctx: CanvasRenderingContext2D, x: number, y: number, s: number,
   ctx.restore();
 }
 
-function drawPavilion(ctx: CanvasRenderingContext2D, t: number) {
+export function drawPavilion(ctx: CanvasRenderingContext2D, t: number) {
   const baseY = WATER_Y + 6;
   // stilts
   ctx.fillStyle = "#4a2f18";
@@ -143,7 +143,7 @@ function drawPavilion(ctx: CanvasRenderingContext2D, t: number) {
 }
 
 // Chú Tễu — chú rối dẫn chuyện, đứng trên thủy đình vẫy tay
-function drawTeu(ctx: CanvasRenderingContext2D, x: number, y: number, t: number) {
+export function drawTeu(ctx: CanvasRenderingContext2D, x: number, y: number, t: number) {
   const bounce = Math.abs(Math.sin(t * 2.4)) * 4;
   ctx.save();
   ctx.translate(x, y - bounce);
@@ -540,9 +540,17 @@ function drawDock(ctx: CanvasRenderingContext2D, e: Engine) {
   ctx.fillText("BẾN", DOCK_X + 62, y - 4);
 }
 
-export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
-  const t = e.t;
+const MOON_X = 742;
+const MOON_Y = 88;
 
+/** Bầu trời đêm hội: sao, trăng, rặng tre, dây đèn lồng, màn sân khấu và băng rôn. */
+export function drawBackdrop(
+  ctx: CanvasRenderingContext2D,
+  t: number,
+  title: string,
+  subtitle: string,
+  opts: { pavilion?: boolean } = {},
+) {
   // ---- night sky ----
   const sky = ctx.createLinearGradient(0, 0, 0, WATER_Y);
   sky.addColorStop(0, "#0c1430");
@@ -565,8 +573,8 @@ export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
   ctx.globalAlpha = 1;
 
   // moon + glow
-  const moonX = 742;
-  const moonY = 88;
+  const moonX = MOON_X;
+  const moonY = MOON_Y;
   const mg = ctx.createRadialGradient(moonX, moonY, 8, moonX, moonY, 90);
   mg.addColorStop(0, "rgba(250, 230, 170, 0.5)");
   mg.addColorStop(1, "rgba(250, 230, 170, 0)");
@@ -597,7 +605,7 @@ export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
   ctx.fill();
 
   // ---- pavilion + lanterns + curtain + banner ----
-  drawPavilion(ctx, t);
+  if (opts.pavilion !== false) drawPavilion(ctx, t);
 
   // lantern string
   ctx.strokeStyle = "rgba(233, 182, 79, 0.55)";
@@ -639,17 +647,20 @@ export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
   ctx.font = "800 30px 'Baloo 2', sans-serif";
   ctx.textAlign = "center";
   ctx.fillStyle = "rgba(10, 16, 34, 0.55)";
-  ctx.fillText("ĐÊM HỘI RỐI NƯỚC", STAGE_W / 2 + 2, 72);
+  ctx.fillText(title, STAGE_W / 2 + 2, 72);
   const bg = ctx.createLinearGradient(0, 48, 0, 76);
   bg.addColorStop(0, "#f6d67c");
   bg.addColorStop(1, "#e9b64f");
   ctx.fillStyle = bg;
-  ctx.fillText("ĐÊM HỘI RỐI NƯỚC", STAGE_W / 2, 70);
+  ctx.fillText(title, STAGE_W / 2, 70);
   ctx.font = "600 13px 'Be Vietnam Pro', sans-serif";
   ctx.fillStyle = "rgba(246, 230, 176, 0.8)";
-  ctx.fillText("MÚA RỐI NƯỚC – TÍCH THẢY CÂU BẮT CÁ", STAGE_W / 2, 92);
+  ctx.fillText(subtitle, STAGE_W / 2, 92);
+}
 
-  // ---- water ----
+/** Mặt ao: nền nước, vệt trăng soi và những gợn sáng trôi. */
+export function drawWaterSurface(ctx: CanvasRenderingContext2D, t: number) {
+  const moonX = MOON_X;
   const wg = ctx.createLinearGradient(0, WATER_Y, 0, STAGE_H);
   wg.addColorStop(0, "#1c4a5c");
   wg.addColorStop(0.5, "#123647");
@@ -685,6 +696,27 @@ export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
     ctx.arc(off + 300, yy + 14, 20, Math.PI * 0.15, Math.PI * 0.85);
     ctx.stroke();
   }
+}
+
+/** Hàng khán giả đứng xem ở mép trước sân khấu. */
+export function drawAudience(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "rgba(6, 10, 20, 0.85)";
+  ctx.beginPath();
+  ctx.moveTo(0, STAGE_H);
+  for (let x = 0; x <= STAGE_W; x += 46) {
+    const h = 16 + ((x * 7919) % 13);
+    ctx.lineTo(x, STAGE_H - h);
+    ctx.arc(x + 10, STAGE_H - h, 9, Math.PI, Math.PI * 2);
+    ctx.lineTo(x + 23, STAGE_H);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
+  const t = e.t;
+  drawBackdrop(ctx, t, "ĐÊM HỘI RỐI NƯỚC", "MÚA RỐI NƯỚC – TÍCH THẢY CÂU BẮT CÁ");
+  drawWaterSurface(ctx, t);
 
   // ripples
   for (const r of e.ripples) {
@@ -742,15 +774,5 @@ export function drawStage(ctx: CanvasRenderingContext2D, e: Engine) {
   ctx.globalAlpha = 1;
 
   // audience silhouettes at the very front (bên khán đài)
-  ctx.fillStyle = "rgba(6, 10, 20, 0.85)";
-  ctx.beginPath();
-  ctx.moveTo(0, STAGE_H);
-  for (let x = 0; x <= STAGE_W; x += 46) {
-    const h = 16 + ((x * 7919) % 13);
-    ctx.lineTo(x, STAGE_H - h);
-    ctx.arc(x + 10, STAGE_H - h, 9, Math.PI, Math.PI * 2);
-    ctx.lineTo(x + 23, STAGE_H);
-  }
-  ctx.closePath();
-  ctx.fill();
+  drawAudience(ctx);
 }

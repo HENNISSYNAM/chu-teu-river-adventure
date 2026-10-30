@@ -1,0 +1,22 @@
+{
+  "name": "heritrust-tvc",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render HeriTrustTVC out/heritrust-tvc.mp4",
+    "render:vertical": "remotion render HeriTrustTVCVertical out/heritrust-tvc-9x16.mp4",
+    "still": "remotion still HeriTrustTVC out/poster.png --frame=250"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.242",
+    "@remotion/google-fonts": "^4.0.242",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "remotion": "^4.0.242"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "typescript": "^5.8.3"
+  }
+}

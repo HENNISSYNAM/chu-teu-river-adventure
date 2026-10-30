@@ -91,16 +91,19 @@
   }
 }
 
-@layer components {
-  /* Nút lễ hội */
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
-      text-base font-semibold leading-none transition-all duration-200
-      select-none touch-manipulation;
-  }
-  .btn:active {
+/* Nút lễ hội. Tailwind v4 chỉ cho @apply các utility, nên khung nút chung khai
+   báo bằng @utility để các biến thể btn-* bên dưới dùng lại được. */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+    text-base font-semibold leading-none transition-all duration-200
+    select-none touch-manipulation;
+
+  &:active {
     transform: scale(0.96);
   }
+}
+
+@layer components {
   .btn-primary {
     @apply btn bg-primary text-primary-foreground shadow-lg
       shadow-primary/40 hover:brightness-110;
