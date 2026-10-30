@@ -4,9 +4,13 @@ import {
   HandLandmarker,
   type HandLandmarkerResult,
   type NormalizedLandmark,
-  type WasmFileset,
 } from "@mediapipe/tasks-vision";
 import wasmAsset from "@/assets/mediapipe-wasm.asset.json";
+
+interface WasmFileset {
+  wasmLoaderPath: string;
+  wasmBinaryPath: string;
+}
 
 export interface HandTuning {
   /** 0.6–2.0 — nhân với biên độ di chuyển */
@@ -89,7 +93,7 @@ export class HandController {
     onStatus?: (s: HandStatus, message?: string) => void,
   ) {
     const c = new HandController(video, preview, tuning);
-    c.onStatus = onStatus;
+    if (onStatus) c.onStatus = onStatus;
     await c.init();
     return c;
   }
@@ -171,18 +175,21 @@ export class HandController {
     let right: NormalizedLandmark[] | null = null;
 
     for (let i = 0; i < hands.length; i++) {
+      const lm = hands[i];
+      if (!lm) continue;
       const cat = labels[i]?.[0]?.categoryName;
       // Khung hình getUserMedia chưa lật gương, MediaPipe mặc định ảnh đã lật → hoán đổi nhãn
-      if (cat === "Right") left = hands[i];
-      else right = hands[i];
+      if (cat === "Right") left = lm;
+      else right = lm;
     }
 
     this.frame.leftPresent = !!left;
     this.frame.rightPresent = !!right;
 
     // Tay trái → lái thuyền ngang
-    if (left) {
-      const mx = 1 - left[0].x; // gương tự nhiên
+    const l0 = left?.[0];
+    if (l0) {
+      const mx = 1 - l0.x; // gương tự nhiên
       this.smoothMove += (axis((mx - 0.5) * 2, this.tuning) - this.smoothMove) * 0.35;
     } else {
       this.smoothMove *= 0.82;
@@ -191,19 +198,24 @@ export class HandController {
 
     // Tay phải → cần câu + cử chỉ
     const hand = right ?? left;
-    if (hand) {
-      const my = hand[0].y;
+    const h0 = hand?.[0];
+    const h4 = hand?.[4];
+    const h8 = hand?.[8];
+    const h9 = hand?.[9];
+    if (hand && h0 && h4 && h8 && h9) {
+      const my = h0.y;
       this.smoothRod += (axis((my - 0.5) * 2, this.tuning) - this.smoothRod) * 0.35;
-      const scale = Math.max(0.02, dist(hand[0], hand[9]));
-      // chụm cái + trỏ → thả câu (bunun biên tăng)
-      const pinch = dist(hand[4], hand[8]) / scale < 0.38;
+      const scale = Math.max(0.02, dist(h0, h9));
+      // chụm cái + trỏ → thả câu (biên tăng)
+      const pinch = dist(h4, h8) / scale < 0.38;
       if (pinch && !this.prevPinch) this.frame.castPressed = true;
       this.prevPinch = pinch;
       // mở bàn tay → kéo cần
-      const palm = hand[9];
+      const h12 = hand[12] ?? h9;
+      const h16 = hand[16] ?? h9;
+      const h20 = hand[20] ?? h9;
       const spread =
-        (dist(hand[8], palm) + dist(hand[12], palm) + dist(hand[16], palm) + dist(hand[20], palm)) /
-        (4 * scale);
+        (dist(h8, h9) + dist(h12, h9) + dist(h16, h9) + dist(h20, h9)) / (4 * scale);
       this.frame.reelHeld = spread > 1.05;
     } else {
       this.smoothRod *= 0.82;
@@ -231,8 +243,11 @@ export class HandController {
       c.lineWidth = 1.4;
       c.beginPath();
       for (const [a, b] of CONNECTIONS) {
-        c.moveTo((1 - lm[a].x) * w, lm[a].y * h);
-        c.lineTo((1 - lm[b].x) * w, lm[b].y * h);
+        const pa = lm[a];
+        const pb = lm[b];
+        if (!pa || !pb) continue;
+        c.moveTo((1 - pa.x) * w, pa.y * h);
+        c.lineTo((1 - pb.x) * w, pb.y * h);
       }
       c.stroke();
       c.fillStyle = "#f6d67c";
