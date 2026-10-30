@@ -92,6 +92,12 @@ function Hub() {
           </div>
         </header>
 
+        <div className="mt-6 flex justify-center">
+          <Link to="/trinh-dien" className="btn-primary text-lg">
+            🎭 Chế độ trình diễn tự chạy
+          </Link>
+        </div>
+
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {ACTS.map((a, i) => (
             <Link

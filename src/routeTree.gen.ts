@@ -14,10 +14,16 @@ import { Route as TroCauCaRouteImport } from './routes/tro.cau-ca'
 import { Route as TroGhepKyUcRouteImport } from './routes/tro.ghep-ky-uc'
 import { Route as TroRongPhunNuocRouteImport } from './routes/tro.rong-phun-nuoc'
 import { Route as TroThamDinhRouteImport } from './routes/tro.tham-dinh'
+import { Route as TrinhDienRouteImport } from './routes/trinh-dien'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrinhDienRoute = TrinhDienRouteImport.update({
+  id: '/trinh-dien',
+  path: '/trinh-dien',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TroCauCaRoute = TroCauCaRouteImport.update({
@@ -43,6 +49,7 @@ const TroThamDinhRoute = TroThamDinhRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/trinh-dien': typeof TrinhDienRoute
   '/tro/cau-ca': typeof TroCauCaRoute
   '/tro/ghep-ky-uc': typeof TroGhepKyUcRoute
   '/tro/rong-phun-nuoc': typeof TroRongPhunNuocRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/trinh-dien': typeof TrinhDienRoute
   '/tro/cau-ca': typeof TroCauCaRoute
   '/tro/ghep-ky-uc': typeof TroGhepKyUcRoute
   '/tro/rong-phun-nuoc': typeof TroRongPhunNuocRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/trinh-dien': typeof TrinhDienRoute
   '/tro/cau-ca': typeof TroCauCaRoute
   '/tro/ghep-ky-uc': typeof TroGhepKyUcRoute
   '/tro/rong-phun-nuoc': typeof TroRongPhunNuocRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/trinh-dien'
     | '/tro/cau-ca'
     | '/tro/ghep-ky-uc'
     | '/tro/rong-phun-nuoc'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/trinh-dien'
     | '/tro/cau-ca'
     | '/tro/ghep-ky-uc'
     | '/tro/rong-phun-nuoc'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/trinh-dien'
     | '/tro/cau-ca'
     | '/tro/ghep-ky-uc'
     | '/tro/rong-phun-nuoc'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TrinhDienRoute: typeof TrinhDienRoute
   TroCauCaRoute: typeof TroCauCaRoute
   TroGhepKyUcRoute: typeof TroGhepKyUcRoute
   TroRongPhunNuocRoute: typeof TroRongPhunNuocRoute
@@ -97,6 +110,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trinh-dien': {
+      id: '/trinh-dien'
+      path: '/trinh-dien'
+      fullPath: '/trinh-dien'
+      preLoaderRoute: typeof TrinhDienRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tro/tham-dinh': {
       id: '/tro/tham-dinh'
       path: '/tro/tham-dinh'
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TrinhDienRoute: TrinhDienRoute,
   TroCauCaRoute: TroCauCaRoute,
   TroGhepKyUcRoute: TroGhepKyUcRoute,
   TroRongPhunNuocRoute: TroRongPhunNuocRoute,

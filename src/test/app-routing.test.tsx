@@ -15,12 +15,15 @@ describe("App routing", () => {
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
 
-  it.each(["/tro/cau-ca", "/tro/rong-phun-nuoc", "/tro/tham-dinh", "/tro/ghep-ky-uc"])(
-    "matches the water-puppet act at %s",
-    (path) => {
-      const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+  it.each([
+    "/trinh-dien",
+    "/tro/cau-ca",
+    "/tro/rong-phun-nuoc",
+    "/tro/tham-dinh",
+    "/tro/ghep-ky-uc",
+  ])("matches the water-puppet act at %s", (path) => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
 
-      expect(router.matchRoutes(path).at(-1)?.routeId).toBe(path);
-    },
-  );
+    expect(router.matchRoutes(path).at(-1)?.routeId).toBe(path);
+  });
 });
