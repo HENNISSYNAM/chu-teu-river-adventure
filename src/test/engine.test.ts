@@ -6,11 +6,11 @@ function input(partial: Partial<InputState> = {}): InputState {
 }
 
 describe("Engine — màn thả câu bắt cá", () => {
-  it("chèo thuyền sang phải theo điều khiển", () => {
+  it("chèo thuyền sang trái theo điều khiển", () => {
     const e = new Engine();
     const x0 = e.boat.x;
-    for (let i = 0; i < 60; i++) e.update(1 / 60, input({ moveAxis: 1 }));
-    expect(e.boat.x).toBeGreaterThan(x0 + 100);
+    for (let i = 0; i < 60; i++) e.update(1 / 60, input({ moveAxis: -1 }));
+    expect(e.boat.x).toBeLessThan(x0 - 60);
   });
 
   it("thả câu gần cá → cá cắn → giữ kéo → bắt được cá", () => {
