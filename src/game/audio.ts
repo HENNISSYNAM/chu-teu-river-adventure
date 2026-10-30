@@ -53,11 +53,11 @@ export class GameAudio {
     if (s % 2 === 1) this.woodblock(0.25);
     // tiếng pluck ngũ cung thưa thớt
     if (Math.random() < 0.42) {
-      const note = PENTA[Math.floor(Math.random() * PENTA.length)];
+      const note = PENTA[Math.floor(Math.random() * PENTA.length)] ?? 440;
       this.pluck(note, 0.16);
     }
     if (s % 16 === 12 && Math.random() < 0.6) {
-      this.pluck(PENTA[2 + Math.floor(Math.random() * 2)] * 2, 0.1);
+      this.pluck((PENTA[2 + Math.floor(Math.random() * 2)] ?? 659) * 2, 0.1);
     }
   }
 
