@@ -92,28 +92,28 @@
 }
 
 @layer components {
-  /* Nút lễ hội */
-  .btn {
+  /* Nút lễ hội — base dùng chung cho mọi biến thể nút */
+  .btn, .btn-primary, .btn-gold, .btn-outline, .btn-quiet {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
       text-base font-semibold leading-none transition-all duration-200
       select-none touch-manipulation;
   }
-  .btn:active {
+  .btn:active, .btn-primary:active, .btn-gold:active, .btn-outline:active, .btn-quiet:active {
     transform: scale(0.96);
   }
   .btn-primary {
-    @apply btn bg-primary text-primary-foreground shadow-lg
+    @apply bg-primary text-primary-foreground shadow-lg
       shadow-primary/40 hover:brightness-110;
   }
   .btn-gold {
-    @apply btn bg-gold text-gold-foreground shadow-lg shadow-gold/30 hover:brightness-105;
+    @apply bg-gold text-gold-foreground shadow-lg shadow-gold/30 hover:brightness-105;
   }
   .btn-outline {
-    @apply btn border-2 border-gold/60 bg-card/60 text-foreground
+    @apply border-2 border-gold/60 bg-card/60 text-foreground
       hover:border-gold hover:bg-card;
   }
   .btn-quiet {
-    @apply btn bg-secondary text-secondary-foreground hover:bg-muted;
+    @apply bg-secondary text-secondary-foreground hover:bg-muted;
   }
   .btn-icon {
     @apply inline-flex h-11 w-11 items-center justify-center rounded-full
